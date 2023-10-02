@@ -1,5 +1,5 @@
 import React from 'react';
-import OTPInput from '../../src';
+import OTPInput, { OTPRef } from '../../src';
 
 function App() {
   const [{ otp, numInputs, separator, minLength, maxLength, placeholder, inputType }, setConfig] = React.useState({
@@ -11,6 +11,12 @@ function App() {
     placeholder: '',
     inputType: 'text' as const,
   });
+
+  const otpRef = React.useRef<OTPRef>(null);
+
+  const focusOtp = () => {
+    otpRef.current?.focus();
+  };
 
   const handleOTPChange = (otp: string) => {
     setConfig((prevConfig) => ({ ...prevConfig, otp }));
@@ -108,6 +114,7 @@ function App() {
             <p>Enter verification code</p>
             <div className="margin-top--small">
               <OTPInput
+                ref={otpRef}
                 inputStyle="inputStyle"
                 numInputs={numInputs}
                 onChange={handleOTPChange}
@@ -120,6 +127,9 @@ function App() {
               />
             </div>
             <div className="btn-row">
+              <button className="btn margin-top--large" type="button" onClick={focusOtp}>
+                Focus
+              </button>
               <button className="btn margin-top--large" type="button" disabled={otp.trim() === ''} onClick={clearOtp}>
                 Clear
               </button>
